@@ -25,9 +25,9 @@ The following table lists the configurable parameters of the Hadoop chart and th
 | Parameter                              | Description                                                    | Default                                                           |
 | -------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `image.repository`                     | Hadoop image                                                   | `farberg/apache-hadoop`                                           |
-| `image.tag`                            | Hadoop image tag                                               | `3.3.2`                                                           |
+| `image.tag`                            | Hadoop image tag                                               | `3.4.1`                                                           |
 | `imagee.pullPolicy`                    | Pull policy for the images                                     | `IfNotPresent`                                                    |
-| `hadoopVersion`                        | Version of hadoop libraries being used                         | `3.3.2`                                                           |
+| `hadoopVersion`                        | Version of hadoop libraries being used                         | `3.4.1`                                                           |
 | `antiAffinity`                         | Pod antiaffinity, `hard` or `soft`                             | `hard`                                                            |
 | `hdfs.nameNode.pdbMinAvailable`        | PDB for HDFS NameNode                                          | `1`                                                               |
 | `hdfs.nameNode.resources`              | resources for the HDFS NameNode                                | `requests:memory=256Mi,cpu=10m,limits:memory=2048Mi,cpu=1000m`    |
@@ -61,7 +61,7 @@ This image is modified from [comcast/kube-yarn](https://github.com/Comcast/kube-
 
 ```bash
 # Set version
-HADOOP_VERSION=3.3.2
+export HADOOP_VERSION=3.4.1
 
 # Build
 docker buildx build --push --platform "linux/arm64,linux/amd64" -t farberg/apache-hadoop:latest -t farberg/apache-hadoop:$HADOOP_VERSION .
@@ -100,6 +100,9 @@ git push origin master
 ```
 
 ## Changes
+
+Version 1.3.0
+- Update to Apache Hadoop 3.4.1
 
 Version 1.2.0
 - Initial release of this chart
