@@ -18,6 +18,19 @@ helm helm repo add pfisterer-hadoop https://pfisterer.github.io/apache-hadoop-he
 helm install --name hadoop pfisterer-hadoop/hadoop
 ```
 
+For local installation:
+
+```bash
+helm install hadoop /path/to/apache-hadoop-helm \
+  --namespace hadoop --create-namespace \
+  --set hdfs.dataNode.replicas=1 \
+  --set hdfs.dataNode.externalHostname=$(minikube ip) \
+  --set hdfs.dataNode.externalDataPortRangeStart=30080 \
+  --set hdfs.dataNode.externalHTTPPortRangeStart=30180 \
+  --set hdfs.nameNode.externalRPCNodePort=30900 \
+  --set hdfs.nameNode.externalHTTPNodePort=30970 \
+  --wait
+```
 ## Configuration
 
 The following table lists the configurable parameters of the Hadoop chart and their default values.
@@ -66,6 +79,20 @@ export HADOOP_VERSION=3.4.1
 # Build
 docker buildx build --push --platform "linux/arm64,linux/amd64" -t farberg/apache-hadoop:latest -t farberg/apache-hadoop:$HADOOP_VERSION .
 ```
+
+## Usage
+To access this HDFS from host,
+```bash
+# Make root writable
+kubectl exec -n hadoop hadoop-hadoop-hdfs-nn-0 -- hdfs dfs -chmod 777 /
+
+# Any hadoop command can be used here
+hadoop fs -ls hdfs://$(minikube ip):30900/
+```
+
+Then you can access the HDFS from your host machine using the following URL:
+
+
 
 ### Testing with minikube
 

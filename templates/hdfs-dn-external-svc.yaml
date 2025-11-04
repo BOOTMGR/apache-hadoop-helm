@@ -1,0 +1,27 @@
+{{- $fullName := include "hadoop.fullname" . -}}
+{{- $replicas := int .Values.hdfs.dataNode.replicas -}}
+{{- $startData := int .Values.hdfs.dataNode.externalDataPortRangeStart -}}
+{{- range $i, $_ := until $replicas }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-hdfs-dn-{{ $i }}-data
+  labels:
+    app.kubernetes.io/name: {{ include "hadoop.name" $ }}
+    helm.sh/chart: {{ include "hadoop.chart" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: hdfs-dn
+spec:
+  type: NodePort
+  selector:
+    statefulset.kubernetes.io/pod-name: {{ $fullName }}-hdfs-dn-{{ $i }}
+  ports:
+  - name: data
+    protocol: TCP
+    port: {{ add $startData $i }}
+    targetPort: {{ add $startData $i }}
+    nodePort: {{ add $startData $i }}
+---
+{{- end }}
+
+

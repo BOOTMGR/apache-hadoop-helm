@@ -13,6 +13,9 @@ antiAffinity: "soft"
 hdfs:
   nameNode:
     pdbMinAvailable: 1
+    # NodePorts to expose NameNode RPC and Web UI externally
+    externalRPCNodePort: 30900
+    externalHTTPNodePort: 30970
 
     resources:
       requests:
